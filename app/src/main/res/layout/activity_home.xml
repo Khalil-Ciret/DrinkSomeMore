@@ -22,7 +22,8 @@
                 android:id="@+id/button26"
                 android:layout_marginBottom="163dp"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:onClick="onClick" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -30,7 +31,8 @@
                 android:text="@string/regularGlass"
                 android:id="@+id/button33"
                 android:layout_alignTop="@+id/button26"
-                android:layout_toEndOf="@+id/button26" />
+                android:layout_toEndOf="@+id/button26"
+                android:onClick="onClick" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -38,7 +40,8 @@
                 android:text="@string/littleBottle"
                 android:id="@+id/button50"
                 android:layout_alignTop="@+id/button33"
-                android:layout_toStartOf="@+id/button100" />
+                android:layout_toStartOf="@+id/button100"
+                android:onClick="onClick" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -46,7 +49,8 @@
                 android:text="@string/normalBottle"
                 android:id="@+id/button100"
                 android:layout_alignTop="@+id/button50"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:onClick="onClick" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -67,6 +71,15 @@
                 android:id="@+id/buttonValidateTextField"
                 android:layout_alignBottom="@+id/editText"
                 android:layout_toEndOf="@+id/button50" />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBar"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="69dp" />
+
         </RelativeLayout>
 
         <LinearLayout android:id="@+id/fullscreen_content_controls" style="?metaButtonBarStyle"
