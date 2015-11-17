@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class DrinkSomeMoreApp extends Application {
 
-    public static final String DB_NAME ="user_water_cons";
+    public static final String DB_NAME ="user_water_conso";
 
 
     @Override
@@ -18,7 +18,9 @@ public class DrinkSomeMoreApp extends Application {
         super.onCreate();
 
         SQLiteDatabase databaseUserAndWaterConsommation = openOrCreateDatabase(DB_NAME,MODE_PRIVATE,null);
-        databaseUserAndWaterConsommation.execSQL("CREATE TABLE IF NOT EXISTS DayOfUse(DATE day, INT waterDrank");
+        databaseUserAndWaterConsommation.execSQL("CREATE TABLE IF NOT EXISTS DailyUse(day int PRIMARY KEY ASC,  waterDrank int)");
+        databaseUserAndWaterConsommation.close();
+
 
     }
 }
