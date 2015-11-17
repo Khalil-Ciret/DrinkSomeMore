@@ -1,12 +1,12 @@
-package com.liquidwolf.drinksomemore;
+package com.liquidwolf.drinksomemore.activities;
 
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
+
+import com.liquidwolf.drinksomemore.R;
 
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
