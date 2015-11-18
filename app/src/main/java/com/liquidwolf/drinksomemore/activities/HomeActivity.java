@@ -31,6 +31,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     //Debugging constant
     private static final String TAG = HomeActivity.class.getSimpleName();
 
+    private long currentDayID;
     private int waterToday;
     private SeekBar barWater;
     private SQLiteDatabase databaseUserAndWaterConsommation;
@@ -41,12 +42,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        this.waterToday=0;
+        this.barWater = (SeekBar) this.findViewById(R.id.seekBar);
+        barWater.setMax(300); //TODO Replace 300 by a variable or a constant
 
         //this.initialiseBarWater();
         this.initialiseDB();
+        this.refreshBar();
 
-        this.barWater = (SeekBar) this.findViewById(R.id.seekBar);
-        barWater.setMax(300); //TODO Replace 300 by a variable or a constant
+
 
     }
 
@@ -85,6 +89,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void updateDB(){
 
         SQLiteDatabase databaseUserAndWaterConsommation = openOrCreateDatabase(DrinkSomeMoreApp.DB_NAME,MODE_PRIVATE,null);
+        ContentValues values = new ContentValues();
+        values.put("day", this.currentDayID);
+        values.put("waterDrank", this.waterToday);
+        databaseUserAndWaterConsommation.update("DailyUse",values,null,null);
 
         //databaseUserAndWaterConsommation.insertOrThrow("DailyUse")
         //databaseUserAndWaterConsommation.execSQL("INSERT INTO DailyUse (day, waterDrank) values(DUMB) ON DUPLICATE KEY UPDATE waterDrank ");
@@ -103,35 +111,37 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if(checkerOfExistenceOfFirstEntry.getCount()>0)
         {
             //Database have already been initialized once, time to retrieve the latest entry.
-            String hasDatabaseBeenitializedTodayQuery = "SELECT * FROM DailyUse";
+            String hasDatabaseBeenitializedTodayQuery = "SELECT max(day) FROM DailyUse";
 
             Cursor checkerOfLastEntry = this.databaseUserAndWaterConsommation.rawQuery(hasDatabaseBeenitializedTodayQuery, null);
             checkerOfLastEntry.moveToFirst();
-            Date lastUse = new Date(checkerOfLastEntry.getLong(checkerOfLastEntry.getColumnIndex("day")));
+            this.currentDayID = checkerOfLastEntry .getLong(0);
+            Date lastUse = new Date(this.currentDayID);
             Date today = new Date(System.currentTimeMillis());
-
             Calendar testerDatelastUse = Calendar.getInstance();
             Calendar testerDateToday = Calendar.getInstance();
             testerDatelastUse.setTime(lastUse);
             testerDateToday.setTime(today);
-
-            Log.d(TAG, "Today is " + testerDateToday.get(Calendar.DAY_OF_MONTH) + "/" + testerDateToday.get(Calendar.MONTH) + "/" + testerDateToday.get(Calendar.YEAR) + " Date of last use is " + testerDatelastUse.get(Calendar.DAY_OF_MONTH) + "/" + testerDatelastUse.get(Calendar.MONTH) + "/" + testerDatelastUse.get(Calendar.YEAR));
 
             if (!(testerDatelastUse.get(Calendar.YEAR) == testerDateToday.get(Calendar.YEAR) &&
                     testerDatelastUse.get(Calendar.DAY_OF_YEAR) == testerDateToday.get(Calendar.DAY_OF_YEAR)))
             {
 
                 ContentValues values = new ContentValues();
-                long todayl = System.currentTimeMillis();
-                Log.d(TAG, ""+todayl+"Ms du jour, je dois pas être égal à zéro");
-                values.put("day", todayl );
+
+                values.put("day", this.currentDayID);
                 values.put("waterDrank", 0);
                 this.databaseUserAndWaterConsommation.insert("DailyUse", null, values);
                 Log.d(TAG, "new entry created in database.");
             }
             else
             {
-                Log.d(TAG, "entry of today already created in database.");
+
+                Log.d(TAG, "entry of today already created in database.Retrieving data.");
+                String retrievingDataOfTodayQuery = "SELECT day, waterDrank FROM DailyUse WHERE day = ?";
+                checkerOfLastEntry= this.databaseUserAndWaterConsommation.rawQuery(retrievingDataOfTodayQuery, new String[]{Long.toString(this.currentDayID)});
+                checkerOfLastEntry.moveToFirst();
+                this.waterToday=checkerOfLastEntry.getInt(checkerOfLastEntry.getColumnIndex("waterDrank"));
             }
         }
         else
@@ -139,9 +149,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             //Database is empty.
             //We create the first entry in the table.
             ContentValues values = new ContentValues();
-            long today = System.currentTimeMillis();
-            Log.d(TAG, ""+today+"Ms du jour, je dois pas être égal à zéro");
-            values.put("day", today);
+            this.currentDayID=System.currentTimeMillis();
+            values.put("day", this.currentDayID);
             values.put("waterDrank", 0);
             this.databaseUserAndWaterConsommation.insert("DailyUse", null, values);
             Log.d(TAG, "first entry created in database.");
@@ -150,6 +159,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
