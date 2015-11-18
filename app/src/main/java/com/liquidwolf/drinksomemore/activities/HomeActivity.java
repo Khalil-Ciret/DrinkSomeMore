@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.SeekBar;
 
 import com.liquidwolf.drinksomemore.DrinkSomeMoreApp;
@@ -69,6 +70,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
               break;
           case R.id.button100:
               this.waterToday += REGULAR_BOTTLE;
+              break;
+          case R.id.buttonValidateTextField:
+              EditText editText=(EditText)this.findViewById(R.id.editTextCustomValue);
+              this.waterToday += Integer.parseInt(editText.getText().toString());
               break;
           case R.id.buttonDebug:
               //Insert debug function here

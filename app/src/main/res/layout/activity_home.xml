@@ -57,11 +57,12 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/editText"
+                android:id="@+id/editTextCustomValue"
                 android:layout_alignWithParentIfMissing="false"
                 android:layout_marginTop="42dp"
                 android:layout_below="@+id/button33"
-                android:layout_toStartOf="@+id/buttonValidateTextField" />
+                android:layout_toStartOf="@+id/buttonValidateTextField"
+                android:onClick="onClick" />
 
             <Button
                 style="?android:attr/buttonStyleSmall"
@@ -69,8 +70,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ok"
                 android:id="@+id/buttonValidateTextField"
-                android:layout_alignBottom="@+id/editText"
-                android:layout_toEndOf="@+id/button50" />
+                android:layout_alignBottom="@+id/editTextCustomValue"
+                android:layout_toEndOf="@+id/button50"
+                android:onClick="onClick" />
 
             <SeekBar
                 android:layout_width="match_parent"
