@@ -74,6 +74,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
           case R.id.buttonValidateTextField:
               EditText editText=(EditText)this.findViewById(R.id.editTextCustomValue);
               this.waterToday += Integer.parseInt(editText.getText().toString());
+              editText.setText("");
               break;
           case R.id.buttonDebug:
               //Insert debug function here
