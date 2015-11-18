@@ -1,6 +1,7 @@
 package com.liquidwolf.drinksomemore.activities;
 
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -8,11 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.liquidwolf.drinksomemore.DrinkSomeMoreApp;
 import com.liquidwolf.drinksomemore.R;
 
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -65,6 +66,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
           case R.id.button100:
               this.waterToday += REGULAR_BOTTLE;
               break;
+          case R.id.buttonDebug:
+              //Insérer ici une méthode de debug
+          default: break;
       }
 
         this.refreshBar();
@@ -80,8 +84,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     public void updateDB(){
 
-    return;
-      //  SQLiteDatabase databaseUserAndWaterConsommation = SQLiteDatabase.openDatabase(DrinkSomeMoreApp.DB_NAME,MODE_PRIVATE,null);
+        SQLiteDatabase databaseUserAndWaterConsommation = openOrCreateDatabase(DrinkSomeMoreApp.DB_NAME,MODE_PRIVATE,null);
 
         //databaseUserAndWaterConsommation.insertOrThrow("DailyUse")
         //databaseUserAndWaterConsommation.execSQL("INSERT INTO DailyUse (day, waterDrank) values(DUMB) ON DUPLICATE KEY UPDATE waterDrank ");
@@ -89,28 +92,57 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initialiseDB() {
-        //this.databaseUserAndWaterConsommation = SQLiteDatabase.openDatabase(DrinkSomeMoreApp.DB_NAME,MODE_PRIVATE,null);
-        Date today = new Date(System.currentTimeMillis());
 
-        Log.d(TAG, ""+today.getTime());
-        String hasDatabaseBeenInitializedTodayQuery = "SELECT max(day) FROM DailyUse";
+        String hasDatabaseBeenEverInitializedQuery = "SELECT * FROM DailyUse";
 
         this.databaseUserAndWaterConsommation = openOrCreateDatabase(DrinkSomeMoreApp.DB_NAME, MODE_PRIVATE,null);
 
-        Cursor checkerOfExistenceOfFirstEntry= this.databaseUserAndWaterConsommation.rawQuery(hasDatabaseBeenInitializedTodayQuery, null);
+        Cursor checkerOfExistenceOfFirstEntry= this.databaseUserAndWaterConsommation.rawQuery(hasDatabaseBeenEverInitializedQuery, null);
 
-        if(checkerOfExistenceOfFirstEntry != null)
+        Log.d(TAG,"Cursor size = " + checkerOfExistenceOfFirstEntry.getCount());
+        if(checkerOfExistenceOfFirstEntry.getCount()>0)
         {
-            checkerOfExistenceOfFirstEntry.moveToFirst();
-            Toast.makeText(this,""+checkerOfExistenceOfFirstEntry.getInt(0), Toast.LENGTH_LONG).show();
-            //TODO check if it's a new day or not, then create the entry in DB
+            //Database have already been initialized once, time to retrieve the latest entry.
+            String hasDatabaseBeenitializedTodayQuery = "SELECT max(day) FROM DailyUse";
+
+            Cursor checkerOfLastEntry = this.databaseUserAndWaterConsommation.rawQuery(hasDatabaseBeenitializedTodayQuery, null);
+            checkerOfLastEntry.moveToFirst();
+            Date lastUse = new Date(checkerOfLastEntry.getInt(0));
+            Date today = new Date(System.currentTimeMillis());
+
+            Calendar testerDatelastUse = Calendar.getInstance();
+            Calendar testerDateToday = Calendar.getInstance();
+            testerDatelastUse.setTime(lastUse);
+            testerDateToday.setTime(today);
+
+            Log.d(TAG, "Today is "+ testerDateToday.get(Calendar.DAY_OF_MONTH)+"/"+testerDateToday.get(Calendar.MONTH)+ "/" + testerDateToday.get(Calendar.YEAR) +" Date of last use is "+ testerDatelastUse.get(Calendar.DAY_OF_MONTH)+"/"+testerDatelastUse.get(Calendar.MONTH)+ "/" + testerDatelastUse.get(Calendar.YEAR) );
+
+            if (!(testerDatelastUse.get(Calendar.YEAR) == testerDateToday.get(Calendar.YEAR) &&
+                    testerDatelastUse.get(Calendar.DAY_OF_YEAR) == testerDateToday.get(Calendar.DAY_OF_YEAR)))
+            {
+
+                ContentValues values = new ContentValues();
+                values.put("day", System.currentTimeMillis() );
+                values.put("waterDrank", 0);
+                this.databaseUserAndWaterConsommation.insert("DailyUse", null, values);
+                Log.d(TAG, "new entry created in database.");
+            }
+            else
+            {
+                Log.d(TAG, "entry of today already created in database.");
+            }
         }
         else
         {
-           //We create the first entry in the table.
-            this.databaseUserAndWaterConsommation.execSQL("INSERT INTO DailyUse VALUES (" + Long.toString(System.currentTimeMillis()) + ", 0");
+            //Database is empty.
+            //We create the first entry in the table.
+            ContentValues values = new ContentValues();
+            values.put("day", System.currentTimeMillis());
+            values.put("waterDrank", 0);
+            this.databaseUserAndWaterConsommation.insert("DailyUse", null, values);
+            Log.d(TAG, "first entry created in database.");
         }
-
+        this.databaseUserAndWaterConsommation.close();
 
 
     }
