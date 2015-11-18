@@ -103,11 +103,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if(checkerOfExistenceOfFirstEntry.getCount()>0)
         {
             //Database have already been initialized once, time to retrieve the latest entry.
-            String hasDatabaseBeenitializedTodayQuery = "SELECT max(day) FROM DailyUse";
+            String hasDatabaseBeenitializedTodayQuery = "SELECT * FROM DailyUse";
 
             Cursor checkerOfLastEntry = this.databaseUserAndWaterConsommation.rawQuery(hasDatabaseBeenitializedTodayQuery, null);
             checkerOfLastEntry.moveToFirst();
-            Date lastUse = new Date(checkerOfLastEntry.getInt(0));
+            Date lastUse = new Date(checkerOfLastEntry.getLong(checkerOfLastEntry.getColumnIndex("day")));
             Date today = new Date(System.currentTimeMillis());
 
             Calendar testerDatelastUse = Calendar.getInstance();
@@ -115,14 +115,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             testerDatelastUse.setTime(lastUse);
             testerDateToday.setTime(today);
 
-            Log.d(TAG, "Today is "+ testerDateToday.get(Calendar.DAY_OF_MONTH)+"/"+testerDateToday.get(Calendar.MONTH)+ "/" + testerDateToday.get(Calendar.YEAR) +" Date of last use is "+ testerDatelastUse.get(Calendar.DAY_OF_MONTH)+"/"+testerDatelastUse.get(Calendar.MONTH)+ "/" + testerDatelastUse.get(Calendar.YEAR) );
+            Log.d(TAG, "Today is " + testerDateToday.get(Calendar.DAY_OF_MONTH) + "/" + testerDateToday.get(Calendar.MONTH) + "/" + testerDateToday.get(Calendar.YEAR) + " Date of last use is " + testerDatelastUse.get(Calendar.DAY_OF_MONTH) + "/" + testerDatelastUse.get(Calendar.MONTH) + "/" + testerDatelastUse.get(Calendar.YEAR));
 
             if (!(testerDatelastUse.get(Calendar.YEAR) == testerDateToday.get(Calendar.YEAR) &&
                     testerDatelastUse.get(Calendar.DAY_OF_YEAR) == testerDateToday.get(Calendar.DAY_OF_YEAR)))
             {
 
                 ContentValues values = new ContentValues();
-                values.put("day", System.currentTimeMillis() );
+                long todayl = System.currentTimeMillis();
+                Log.d(TAG, ""+todayl+"Ms du jour, je dois pas être égal à zéro");
+                values.put("day", todayl );
                 values.put("waterDrank", 0);
                 this.databaseUserAndWaterConsommation.insert("DailyUse", null, values);
                 Log.d(TAG, "new entry created in database.");
@@ -137,7 +139,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             //Database is empty.
             //We create the first entry in the table.
             ContentValues values = new ContentValues();
-            values.put("day", System.currentTimeMillis());
+            long today = System.currentTimeMillis();
+            Log.d(TAG, ""+today+"Ms du jour, je dois pas être égal à zéro");
+            values.put("day", today);
             values.put("waterDrank", 0);
             this.databaseUserAndWaterConsommation.insert("DailyUse", null, values);
             Log.d(TAG, "first entry created in database.");
