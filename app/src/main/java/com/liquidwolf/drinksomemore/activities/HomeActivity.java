@@ -1,11 +1,11 @@
 package com.liquidwolf.drinksomemore.activities;
 
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
+public class HomeActivity extends Activity implements View.OnClickListener {
 
 
     /**

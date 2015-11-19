@@ -20,37 +20,37 @@
                 android:layout_height="wrap_content"
                 android:text="@string/littleGlass"
                 android:id="@+id/button26"
-                android:layout_marginBottom="163dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:onClick="onClick" />
+                android:onClick="onClick"
+                android:layout_marginTop="76dp"
+                android:layout_below="@+id/buttonDebug"
+                android:layout_toStartOf="@+id/editTextCustomValue" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/regularGlass"
                 android:id="@+id/button33"
+                android:onClick="onClick"
                 android:layout_alignTop="@+id/button26"
-                android:layout_toEndOf="@+id/button26"
-                android:onClick="onClick" />
+                android:layout_toStartOf="@+id/buttonDebug" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/littleBottle"
                 android:id="@+id/button50"
-                android:layout_alignTop="@+id/button33"
-                android:layout_toStartOf="@+id/button100"
-                android:onClick="onClick" />
+                android:onClick="onClick"
+                android:layout_above="@+id/editTextCustomValue"
+                android:layout_toEndOf="@+id/buttonDebug" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/normalBottle"
                 android:id="@+id/button100"
-                android:layout_alignTop="@+id/button50"
-                android:layout_alignParentEnd="true"
-                android:onClick="onClick" />
+                android:onClick="onClick"
+                android:layout_above="@+id/editTextCustomValue"
+                android:layout_alignStart="@+id/buttonValidateTextField" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -59,10 +59,9 @@
                 android:ems="10"
                 android:id="@+id/editTextCustomValue"
                 android:layout_alignWithParentIfMissing="false"
-                android:layout_marginTop="42dp"
-                android:layout_below="@+id/button33"
-                android:layout_toStartOf="@+id/buttonValidateTextField"
-                android:onClick="onClick" />
+                android:onClick="onClick"
+                android:layout_below="@+id/button26"
+                android:layout_centerHorizontal="true" />
 
             <Button
                 style="?android:attr/buttonStyleSmall"
@@ -70,17 +69,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ok"
                 android:id="@+id/buttonValidateTextField"
+                android:onClick="onClick"
                 android:layout_alignBottom="@+id/editTextCustomValue"
-                android:layout_toEndOf="@+id/button50"
-                android:onClick="onClick" />
+                android:layout_toEndOf="@+id/editTextCustomValue" />
 
             <SeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBar"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="69dp" />
+                android:layout_marginBottom="64dp"
+                android:layout_above="@+id/textViewWaterDrank"
+                android:layout_centerHorizontal="true" />
 
             <Button
                 style="?android:attr/buttonStyleSmall"
@@ -99,6 +98,14 @@
                 android:layout_above="@+id/buttonDebug"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="34dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp" />
 
         </RelativeLayout>
 
