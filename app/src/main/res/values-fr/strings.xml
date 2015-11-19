@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Drink Some More</string>
+    <string name="labelDrank">Aujourd\'hui, vous avez bu 0 L !</string>
+    <string name="labelDrank_Start">Aujourd\'hui, vous avez bu </string>
+    <string name="labelDrank_End" translatable="false">L !</string>
+</resources>

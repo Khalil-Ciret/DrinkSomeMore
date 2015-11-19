@@ -7,9 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.liquidwolf.drinksomemore.DrinkSomeMoreApp;
 import com.liquidwolf.drinksomemore.R;
@@ -32,10 +34,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     //Debugging constant
     private static final String TAG = HomeActivity.class.getSimpleName();
 
+    /**
+     * Parameters used for database management
+     */
     private long currentDayID;
     private int waterToday;
-    private SeekBar barWater;
     private SQLiteDatabase databaseUserAndWaterConsommation;
+
+    /**
+     * Widgets
+     */
+    private SeekBar barWater;
+    private TextView labelWaterDrank;
+
 
 
     @Override
@@ -47,9 +58,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         this.barWater = (SeekBar) this.findViewById(R.id.seekBar);
         barWater.setMax(300); //TODO Replace 300 by a variable or a constant
 
+        this.barWater.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return true;
+                }
+        });//Weird, but allow the bar to not be moved without altering its layout.
+
+
+        this.labelWaterDrank = (TextView) this.findViewById(R.id.textViewWaterDrank);
+
         //this.initialiseBarWater();
         this.initialiseDB();
-        this.refreshBar();
+        this.refreshUI();
 
 
 
@@ -81,15 +102,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
           default: break;
       }
 
-        this.refreshBar();
+        this.refreshUI();
         this.updateDB();
 
 
       }
 
-    public void refreshBar(){
-            this.barWater.setProgress(this.waterToday);
-
+    public void refreshUI(){
+        this.barWater.setProgress(this.waterToday);
+        this.labelWaterDrank.setText(getResources().getString(R.string.labelDrank_Start)+" "+(float)this.waterToday/100+" "+(getResources().getString(R.string.labelDrank_End)));
     }
 
     public void updateDB() {
