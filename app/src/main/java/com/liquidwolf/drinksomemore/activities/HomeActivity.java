@@ -98,7 +98,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         ContentValues values = new ContentValues();
         values.put("day", this.currentDayID);
         values.put("waterDrank", this.waterToday);
-        databaseUserAndWaterConsommation.update("DailyUse", values, null, null);
+        databaseUserAndWaterConsommation.replace("DailyUse", null, values);
         this.databaseUserAndWaterConsommation.close();
 
     }
